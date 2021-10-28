@@ -20,8 +20,8 @@ end
 require_relative '../test/dummy/config/environment'
 ActiveRecord::Migrator.migrations_paths = [File.expand_path('../test/dummy/db/migrate', __dir__)]
 require 'rails/test_help'
-require 'pry'
 require 'minitest/autorun'
+require 'minitest/rails'
 
 # Filter out Minitest backtrace while allowing backtrace from other libraries
 # to be shown.
@@ -42,17 +42,5 @@ class Foo
     @parent = _parent
     @association = _association
     @foo = foo
-  end
-end
-
-class ActiveSupport::TestCase
-  def with_config(**options)
-    @_original_config = Embedded.config
-    options.each do |key, value|
-      Embedded.config.public_send("#{key}=", value)
-    end
-    yield
-  ensure
-    Embedded.config = @_original_config
   end
 end

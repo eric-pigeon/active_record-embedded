@@ -11,33 +11,13 @@ module ActiveRecord
 
       delegate_missing_to :to_a
 
-      # Name of this query, if it matches an index then an index can be
-      # used.
-      #
-      # @return [String]
-      def query_name
-        if filters.one?
-          filters.keys.first.to_s
-        else
-          filters.keys.join('_and_')
-        end
-      end
-
       # Apply query and iterate over each model in the collection.
       #
       # @yields [ActiveRecord::Embedded::Model] for each datum
       def each
-        if model[association.name]['index'].key?(query_name)
-          values = model[association.name]['index'][query_name]['values']
-          indexes = filters.values.map { |value| values.index(value) }
-          data = indexes.compact.map do |index|
-            model[association.name]['data'][index]
-          end
-        else
-          data = model[association.name]['data']
-          data = apply_filters!(data)
-          data = apply_sorts!(data)
-        end
+        data = model[association.name]
+        data = apply_filters!(data)
+        data = apply_sorts!(data)
 
         data[from..to].each { |params| yield build(params) }
       end

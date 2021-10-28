@@ -1,37 +1,27 @@
 ---
 AllCops:
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 2.7
   Exclude:
     - 'vendor/bundle/**/*'
     - 'test/dummy/**/*'
     - 'test/test_helper.rb'
 
-Lint/UnderscorePrefixedVariableName:
-  Exclude:
-    - 'lib/active_record/embedded/model.rb'
-    - 'test/test_helper.rb'
-
-Metrics/AbcSize:
-  Max: 39
-
-Metrics/BlockLength:
-  CountComments: false
-  ExcludedMethods:
-    - class_methods
-    - refine
-  Max: 36
-
-Metrics/ParameterLists:
-  Max: 6
-
-Naming/UncommunicativeMethodParamName:
-  Exclude:
-    - 'lib/active_record/embedded/model/storage.rb'
-
-Style/DoubleNegation:
-  Exclude:
-    - 'lib/active_record/embedded/field/boolean.rb'
-
-Lint/UnusedMethodArgument:
-  Exclude:
-    - 'lib/active_record/embedded/field.rb'
+#Lint/UnderscorePrefixedVariableName:
+#  Exclude:
+#    - 'lib/active_record/embedded/model.rb'
+#    - 'test/test_helper.rb'
+#
+#Metrics/BlockLength:
+#  CountComments: false
+#  ExcludedMethods:
+#    - class_methods
+#    - refine
+#  Max: 36
+#
+#Naming/MethodParameterName:
+#  Exclude:
+#    - 'lib/active_record/embedded/model/storage.rb'
+#
+#Style/DoubleNegation:
+#  Exclude:
+#    - 'lib/active_record/embedded/field/boolean.rb'

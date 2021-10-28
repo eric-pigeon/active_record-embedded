@@ -3,7 +3,7 @@
 module ActiveRecord
   module Embedded
     # Mix this into your embedded model classes to provide
-    # +ActiveRecord::Embedded+ functionality, including field/index
+    # +ActiveRecord::Embedded+ functionality, including field
     # definition, validations, callbacks, and AR-style fields like
     # timestamps and identifiers.
     module Model
@@ -11,17 +11,11 @@ module ActiveRecord
 
       include ActiveModel::Model
       include Attributes
-      include Indexing
       include Fields
       include Persistence
       include Querying
       include Storage
-      include ActiveRecord::Integration
       include Comparable
-
-      included do
-        self.cache_versioning = ActiveRecord::Base.cache_versioning
-      end
 
       # @param [ActiveRecord::Base] _parent
       # @param [Embedded::Association] _association - Relationship metadata
@@ -43,21 +37,6 @@ module ActiveRecord
         return false if id.blank?
 
         id == other&.id
-      end
-
-      # Prefix the embedded model's cache key with the parent model's
-      # cache key.
-      #
-      # @return [String] a stable cache key that can be used to identify
-      #                  this embedded record.
-      def cache_key(*timestamp_names)
-        "#{_parent.cache_key}/#{super}"
-      end
-
-      private
-
-      def max_updated_column_timestamp(_names = [])
-        [created_at, updated_at].max
       end
     end
   end

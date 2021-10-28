@@ -3,7 +3,7 @@
 module ActiveRecord
   module Embedded
     # Configures the library based on data in the Rails app.
-    class Engine < ::Rails::Engine
+    class Railtie < Rails::Railtie
       initializer 'active_record.embedded' do
         db_config = Rails.configuration.database_configuration[Rails.env]
         adapter = db_config['adapter']

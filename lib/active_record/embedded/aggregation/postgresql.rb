@@ -4,7 +4,7 @@ module ActiveRecord
   module Embedded
     class Aggregation
       # Driver for JSON/JSONB query support in PostgreSQL. Uses a +@>+
-      # query to look for partial JSON in the +data+ Array.
+      # query to look for partial JSON in the hash
       class Postgresql < Aggregation
         delegate :any?, :empty?, to: :results
 
@@ -18,7 +18,7 @@ module ActiveRecord
         private
 
         def params
-          { data: [filters] }.to_json
+          [filters].to_json
         end
       end
     end

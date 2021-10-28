@@ -294,42 +294,13 @@ class Item
 end
 ```
 
-### Indexing
-
-Indexes on known queries help to speed up reading embedded data from the
-database, especially when dealing with a large amount of records.
-
-To define an index on an embedded model, use the `index` macro:
-
-```ruby
-class Item
-  include ActiveRecord::Embedded::Model
-
-  embedded_in :order
-
-  field :sku, type: String
-
-  index :sku, unique: true
-end
-```
-
-This macro is based off of Mongoid's, but doesn't include the esoteric
-syntax of MongoDB. Instead, you provide the attributes you wish to index
-(an Array can be specified if it's a compound index), then the options
-for said index. The options for indexes are as follows:
-
-- `:direction` can be `:asc` (default) or `:desc`
-- `:unique` if set to `true` will throw an error when a non-unique value
-  is added to the index
-
 ### Rails Integration
 
 Although Rails isn't required to use this library, some out-of-box
 functionality is included into the model in case it is within a Rails
 app. You'll find that the generated `*_path`, `*_url` and of course the
 `url_for` helpers will generate predictable path names for your embedded
-models, and `#cache_key` has been modified to include the parent model's
-cache key for easy manual expiration.
+models.
 
 ## Contributing
 

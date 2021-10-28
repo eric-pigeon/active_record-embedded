@@ -18,8 +18,6 @@ module ActiveRecord
           field :id, default: -> { SecureRandom.uuid }
           field :created_at, type: Time, default: -> { Time.current }
           field :updated_at, type: Time, default: -> { Time.current }
-
-          index :id, unique: true
         end
 
         class_methods do

@@ -90,21 +90,15 @@ module ActiveRecord
         clone.tap { |query| query.from = from }
       end
 
-      # Find a model by the given params. Uses an index if possible,
-      # otherwise performs a full table scan unless +config.scan_tables+
-      # is set to false.
+      # Find a model by the given params.
       #
       # @return [ActiveRecord::Embedded::Model] or +nil+ if nothing found
-      # @see ActiveRecord::Embedded::Query#find_by_index for more information
-      #      on what happens when indexes are used
       def find_by(params = {})
-        find_by_index(params) || where(params).first
+        where(params).first
       end
 
-      # Find a model by the given params. Uses an index if possible,
-      # otherwise performs a full table scan unless +config.scan_tables+
-      # is set to false. Throws an error when no record can be found by
-      # any means.
+      # Find a model by the given params. Throws an error when no record can
+      # be found by any means.
       #
       # @return [ActiveRecord::Embedded::Model] if found
       # @throws [ActiveRecord::RecordNotFound] when not found
@@ -122,7 +116,7 @@ module ActiveRecord
       # @param [String] ID - Unique ID for the model you wish to find
       # @return [ActiveRecord::Embedded::Model] or +nil+ if none can be found
       def find(id)
-        find_by_index(id: id)
+        where(id: id).first
       end
 
       # Find a given model in the database by its ID. Throw an error
@@ -151,49 +145,6 @@ module ActiveRecord
                   end
         entries[10] = '...' if entries.size == 11
         entries
-      end
-
-      # Find a given model by its index.
-      #
-      # @private
-      def find_by_index(params = {})
-        index = find_index(params)
-        return if index.blank?
-
-        values = index['values']
-        position = find_position(params, values)
-        attrs = model[association.name]['data'][position] unless position.nil?
-
-        return unless attrs.present?
-
-        build(attrs)
-      end
-
-      # Find an index for the given query.
-      #
-      # @private
-      # @return [Hash] or +nil+ if nothing can be found.
-      def find_index(params = {})
-        name = if params.one?
-                 params.keys.first.to_s
-               else
-                 params.keys.join('_and_')
-               end
-        index = model[association.name]['index'][name]
-
-        return if index.blank? && Embedded.config.scan_tables
-        raise NoSolutionsError, name if index.blank?
-
-        index
-      end
-
-      # Find position of data in the array.
-      #
-      # @private
-      # @param [Hash] params
-      # @param [Array] index_values
-      def find_position(params, index_values = [])
-        params.values.map { |value| index_values.index(value) }.compact.first
       end
     end
   end

@@ -3,12 +3,11 @@
 require 'active_record'
 require 'active_support/all'
 
-require 'active_record/embedded/engine' if defined? Rails
+require 'active_record/embedded/railtie' if defined?(Rails::Railtie)
 require 'active_record/embedded/error'
 require 'active_record/embedded/type_error'
 require 'active_record/embedded/interface'
 require 'active_record/embedded/query'
-require 'active_record/embedded/query/no_solutions_error'
 require 'active_record/embedded/field'
 require 'active_record/embedded/field/string'
 require 'active_record/embedded/field/integer'
@@ -20,9 +19,6 @@ require 'active_record/embedded/field/regexp'
 require 'active_record/embedded/field/time'
 require 'active_record/embedded/field/symbol'
 require 'active_record/embedded/field/not_defined_error'
-
-require 'active_record/embedded/index'
-require 'active_record/embedded/index/collection'
 
 require 'active_record/embedded/association'
 require 'active_record/embedded/association/many'
@@ -39,7 +35,6 @@ require 'active_record/embedded/aggregation/mysql'
 require 'active_record/embedded/model/attributes'
 require 'active_record/embedded/model/persistence'
 require 'active_record/embedded/model/fields'
-require 'active_record/embedded/model/indexing'
 require 'active_record/embedded/model/querying'
 require 'active_record/embedded/model/storage'
 require 'active_record/embedded/model'
@@ -70,7 +65,6 @@ module ActiveRecord
 
     def self.config
       @config ||= ActiveSupport::Configurable::Configuration.new.tap do |cfg|
-        cfg.scan_tables = true
         cfg.adapter = :native
         cfg.serialize_data = false
       end
@@ -105,7 +99,6 @@ module ActiveRecord
         serialize name, Hash if Embedded.adapter.serialized
         define_method(name) { assoc.query(self) }
         define_method("#{name}=") { |value| assoc.assign(self, value) }
-        define_method("reindex_#{name}") { assoc.index(self) }
       end
 
       # @!method embeds_one(name, class_name: nil)

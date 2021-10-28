@@ -91,9 +91,6 @@ class ItemTest < ActiveSupport::TestCase
   end
 
   test 'query all items with postgres adapter' do
-    @_original_adapter = ActiveRecord::Embedded.config.adapter
-    ActiveRecord::Embedded.config.adapter = :postgresql
-
     collection = Item.where(quantity: 1)
     order1 = orders(:one)
     order2 = orders(:one)
@@ -102,8 +99,6 @@ class ItemTest < ActiveSupport::TestCase
     assert_includes collection, order1.items.find_by(quantity: 1)
     assert_includes collection, order2.items.find_by(quantity: 1)
     refute_includes collection, order2.items.find_by(quantity: 2)
-  ensure
-    ActiveRecord::Embedded.config.adapter = @_original_adapter
   end
 
   test 'use alternative case for attributes' do
@@ -157,12 +152,5 @@ class ItemTest < ActiveSupport::TestCase
     item = order.items.first
 
     assert item.update!(sku: 'FOO', quantity: 2)
-  end
-
-  test 'cache key' do
-    order = orders(:one)
-    item = order.items.first
-
-    assert item.send(:max_updated_column_timestamp, %i[foo bar])
   end
 end
