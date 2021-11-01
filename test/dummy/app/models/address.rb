@@ -5,6 +5,7 @@ class Address
 
   embedded_in :order
 
+  field :id, default: -> { SecureRandom.uuid }
   field :name
   field :street_1
   field :street_2

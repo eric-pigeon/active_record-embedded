@@ -37,6 +37,7 @@ require 'active_record/embedded/model/persistence'
 require 'active_record/embedded/model/fields'
 require 'active_record/embedded/model/querying'
 require 'active_record/embedded/model/storage'
+require 'active_record/embedded/timestamps'
 require 'active_record/embedded/model'
 
 require 'active_record/embedded/dynamic_attributes'

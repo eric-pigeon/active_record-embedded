@@ -2,9 +2,11 @@
 
 class Item
   include ActiveRecord::Embedded::Model
+  include ActiveRecord::Embedded::Timestamps
 
   embedded_in :order
 
+  field :id, default: -> { SecureRandom.uuid }
   field :sku
   field :quantity, type: Integer
   field :price, type: Float, default: 0.0

@@ -12,12 +12,7 @@ module ActiveRecord
 
         included do
           class_attribute :fields
-
           self.fields ||= {}
-
-          field :id, default: -> { SecureRandom.uuid }
-          field :created_at, type: Time, default: -> { Time.current }
-          field :updated_at, type: Time, default: -> { Time.current }
         end
 
         class_methods do
